@@ -14,11 +14,55 @@ class Message extends User
     }
 
 
-    public function getNotiCount($user_id){
-        $st= $this->pdo->prepare("Select Count(`msg_id`) as `totalM`,(Select Count(`id`) from `notification` where `noti_for` = :u_id and `status`='0') as `totalN` from `message` where `msg_to`=:u_id and `status` = '0'");
+    public function noti($user_id){
+        $st= $this->pdo->prepare("select * from `notification` N 
+                  left join  `user` U on N.`noti_from` = U.`user_id`
+                  left join `tweets` T on N.`target` = T.`tweet_id`
+                  left join `likes` L on N.`target` = L.`likeOn`
+                  left join `follow` F on N.`noti_from` = F.`sender` and N.`noti_for`=F.`receiver`
+                  where N.`noti_for` = :user_id and N.`noti_from` != :user_id" );
+
+        $st->bindParam(':user_id',$user_id,PDO::PARAM_INT);
+        $st->execute();
+        return $st->fetchAll(PDO::FETCH_OBJ);
+
+    }
+
+
+    public function notiViewed($user_id){
+        $st= $this->pdo->prepare("update `notification` set `status` = '1' where `noti_for`= :u_id ");
+
+
         $st->bindParam(':u_id',$user_id,PDO::PARAM_INT);
         $st->execute();
 
+    }
+
+
+    public  function sendNoti($receiver_id,$sender_id,$tw_id,$type){
+
+        $this->create('notification',array('noti_for'=>$receiver_id,'noti_from'=>$sender_id,'target'=>$tw_id,'type'=>$type,'time'=>date('Y-m-d H:i:s')));
+
+    }
+
+
+
+
+
+    public function msgsViewed($user_id){
+        $st= $this->pdo->prepare("update `messages` set `status` = '1' where `msg_to`= :u_id and `status` = '0' ");
+
+        $st->bindParam(':u_id',$user_id,PDO::PARAM_INT);
+        $st->execute();
+
+    }
+
+
+
+    public function getNotiCount($user_id){
+        $st= $this->pdo->prepare("Select Count(`msg_id`) as `totalM`,(Select Count(`id`) from `notification` where `noti_for` = :u_id and `status`='0') as `totalN` from `messages` where `msg_to`=:u_id and `status` = '0'");
+        $st->bindParam(':u_id',$user_id,PDO::PARAM_INT);
+        $st->execute();
         return $st->fetch(PDO::FETCH_OBJ);
 
     }

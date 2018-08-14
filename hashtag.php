@@ -7,10 +7,11 @@ include 'core/init.php';
 if (isset($_GET['hashtag']) && !empty($_GET['hashtag'])) {
 
     $hastag =$getFromUsers->checkInput($_GET['hashtag']);
-    $user_id =$_SESSION['user_id'];
+    $user_id =@$_SESSION['user_id'];
     $user = $getFromUsers->userData($user_id);
     $tweets =$getFromTweets->getTweetsByHash($hastag);
     $accaunts =$getFromTweets->getUsersByHash($hastag);
+    $notify = $getFromMsgs->getNotiCount($user_id);
 
 
 
@@ -21,70 +22,8 @@ if (isset($_GET['hashtag']) && !empty($_GET['hashtag'])) {
     header('Location:index.php');
 }
 ?>
-<!doctype html>
-<html>
-<head>
-    <title>twitter</title>
-    <meta charset="UTF-8" />
-    <link rel="stylesheet" href="<?php echo BASE_URL?>/assets/css/font/css/font-awesome.min.css"/>
-    <link rel="stylesheet" href="<?php echo BASE_URL?>/assets/css/style-complete.css"/>
-    <script src="<?php echo BASE_URL?>/assets/js/jquery.js"></script>
 
-</head>
-<!--Helvetica Neue-->
-<body>
-<div class="wrapper">
-    <!-- header wrapper -->
-    <div class="header-wrapper">
-        <div class="nav-container">
-            <div class="nav">
-                <div class="nav-left">
-                    <ul>
-                        <li><a href="<? echo BASE_URL?>home.php"><i class="fa fa-home" aria-hidden="true"></i>Home</a></li>
-                        <?php if($getFromUsers->loggedIn() == true){?>
-
-                            <li><a href="i/notifications"><i class="fa fa-bell" aria-hidden="true"></i>Notification</a></li>
-                            <li><i class="fa fa-envelope" aria-hidden="true"></i>Messages</li>
-
-                        <?php }?>
-
-                    </ul>
-                </div><!-- nav left ends-->
-                <div class="nav-right">
-                    <ul>
-                        <li><input type="text" placeholder="Search" class="search"/><i class="fa fa-search" aria-hidden="true"></i>
-                            <div class="search-result">
-                            </div>
-                        </li>
-
-                        <?php if($getFromUsers->loggedIn() === true){?>
-
-                            <li class="hover"><label class="drop-label" for="drop-wrap1"><img src="<?php echo BASE_URL.$user->profile_photo?>"/></label>
-                                <input type="checkbox" id="drop-wrap1">
-                                <div class="drop-wrap">
-                                    <div class="drop-inner">
-                                        <ul>
-                                            <li><a href="<?php echo BASE_URL.$user->username?>"><?php echo $user->username?></a></li>
-                                            <li><a href="<?php echo BASE_URL;?>settings/account">Settings</a></li>
-                                            <li><a href="<?php echo BASE_URL;?>includes/logout.php">Log out</a></li>
-                                        </ul>
-                                    </div>
-                                </div>
-                            </li>
-                            <li><label for="pop-up-tweet" class="addTweetBtn">Tweet</label></li>
-                        <?php } else{
-
-                            echo '<li>
-                            <a href="'.BASE_URL.'index.php"> Have an account? Log in!</a>
-                            </li>';
-
-                        }?>
-                    </ul>
-                </div><!-- nav right ends-->
-
-            </div><!-- nav ends -->
-        </div><!-- nav container ends -->
-    </div><!-- header wrapper end -->
+<?php include 'includes/header.inc.php'?>
 
 
 
@@ -362,6 +301,8 @@ if (isset($_GET['hashtag']) && !empty($_GET['hashtag'])) {
         <script type="text/javascript" src="<?php echo BASE_URL?>assets/js/popupForm.js"></script>
         <script type="text/javascript" src="<?php echo BASE_URL?>assets/js/messages.js"></script>
         <script type="text/javascript" src="<?php echo BASE_URL?>assets/js/postMsg.js"></script>
+        <script type="text/javascript" src="<?php echo BASE_URL?>assets/js/noti.js"></script>
+
 
 
 

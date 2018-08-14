@@ -11,11 +11,13 @@ if(isset($_GET['username'])== true && empty($_GET['username'])==false)
     $uName=$getFromUsers->checkInput($_GET['username']);
     $profId=$getFromUsers->IdByUsername($uName);
     $profData=$getFromUsers->userData($profId);
-    $user_id=$_SESSION['user_id'];
+    $user_id=@$_SESSION['user_id'];
     $user= $getFromUsers->userData($user_id);
+    $notify =$getFromMsgs->getNotiCount($user_id);
+
 
     if (!$profData){
-        header('Location:index.php');
+        header('Location:'.BASE_URL.'index.php');
     }
 
 
@@ -23,71 +25,8 @@ if(isset($_GET['username'])== true && empty($_GET['username'])==false)
 ?>
 
 
-<!doctype html>
-<html>
-<head>
-    <title>twitter</title>
-    <meta charset="UTF-8" />
-    <link rel="stylesheet" href="assets/css/font/css/font-awesome.min.css"/>
-    <link rel="stylesheet" href="assets/css/style-complete.css"/>
-    <script src="assets/js/jquery.js"></script>
+<?php include 'includes/header.inc.php'?>
 
-</head>
-<!--Helvetica Neue-->
-<body>
-<div class="wrapper">
-    <?php echo BASE_URL;?>
-    <!-- header wrapper -->
-    <div class="header-wrapper">
-        <div class="nav-container">
-            <div class="nav">
-                <div class="nav-left">
-                    <ul>
-                        <li><a href="<? echo BASE_URL?>home.php"><i class="fa fa-home" aria-hidden="true"></i>Home</a></li>
-                        <?php if($getFromUsers->loggedIn() == true){?>
-
-                        <li><a href="i/notifications"><i class="fa fa-bell" aria-hidden="true"></i>Notification</a></li>
-                        <li><i class="fa fa-envelope" aria-hidden="true"></i>Messages</li>
-
-                        <?php }?>
-
-                    </ul>
-                </div><!-- nav left ends-->
-                <div class="nav-right">
-                    <ul>
-                        <li><input type="text" placeholder="Search" class="search"/><i class="fa fa-search" aria-hidden="true"></i>
-                            <div class="search-result">
-                            </div>
-                        </li>
-
-                        <?php if($getFromUsers->loggedIn() === true){?>
-
-                        <li class="hover"><label class="drop-label" for="drop-wrap1"><img src="<?php echo BASE_URL.$user->profile_photo?>"/></label>
-                            <input type="checkbox" id="drop-wrap1">
-                            <div class="drop-wrap">
-                                <div class="drop-inner">
-                                    <ul>
-                                        <li><a href="<?php echo BASE_URL.$user->username?>"><?php echo $user->username?></a></li>
-                                        <li><a href="<?php echo BASE_URL;?>settings/account">Settings</a></li>
-                                        <li><a href="<?php echo BASE_URL;?>includes/logout.php">Log out</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </li>
-                        <li><label for="pop-up-tweet" class="addTweetBtn">Tweet</label></li>
-                        <?php } else{
-
-                            echo '<li>
-                            <a href="'.BASE_URL.'index.php"> Have an account? Log in!</a>
-                            </li>';
-
-                        }?>
-                    </ul>
-                </div><!-- nav right ends-->
-
-            </div><!-- nav ends -->
-        </div><!-- nav container ends -->
-    </div><!-- header wrapper end -->
     <!--Profile cover-->
     <div class="profile-cover-wrap">
         <div class="profile-cover-inner">
@@ -418,6 +357,8 @@ foreach ($tweets as $t) {
 <script type="text/javascript" src="assets/js/follow.js"></script>
 <script type="text/javascript" src="assets/js/messages.js"></script>
 <script type="text/javascript" src="assets/js/postMsg.js"></script>
+<script type="text/javascript" src="<?php echo BASE_URL?>assets/js/noti.js"></script>
+
 
 
 </body>

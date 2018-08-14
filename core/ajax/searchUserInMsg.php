@@ -4,6 +4,7 @@
 
 include '../init.php';
 
+$getFromUsers->preventAccess($_SERVER['REQUEST_METHOD'],realpath(__FILE__),realpath($_SERVER['SCRIPT_FILENAME']));
 
 
 if(isset($_POST['search']) && !empty($_POST['search'])) {

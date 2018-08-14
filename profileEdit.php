@@ -9,6 +9,7 @@ if ($getFromUsers->loggedIn() === false) {
 
 $user_id = $_SESSION['user_id'];
 $user = $getFromUsers->userData($user_id);
+$notify =$getFromMsgs->getNotiCount($user_id);
 
 
 if (isset($_POST['screenName'])) {
@@ -60,63 +61,8 @@ if (isset($_FILES['profileCover'])){
 
 ?>
 
-<!doctype html>
-<html>
-<head>
-    <title>Profile edit page</title>
-    <meta charset="UTF-8"/>
-    <link rel="stylesheet" href="assets/css/font/css/font-awesome.min.css"/>
-    <link rel="stylesheet" href="assets/css/style-complete.css"/>
-    <script src="assets/js/jquery.js"></script>
-</head>
-<!--Helvetica Neue-->
-<body>
-<div class="wrapper">
-    <!-- header wrapper -->
-    <div class="header-wrapper">
+<?php include 'includes/header.inc.php'?>
 
-        <div class="nav-container">
-            <!-- Nav -->
-            <div class="nav">
-                <div class="nav-left">
-                    <ul>
-                        <li><a href="home.php"><i class="fa fa-home" aria-hidden="true"></i>Home</a></li>
-                        <li><a href="i/notifications"><i class="fa fa-bell" aria-hidden="true"></i>Notification</a></li>
-                        <l><i class="fa fa-envelope" aria-hidden="true"></i>Messages</li>
-                    </ul>
-                </div>
-                <!-- nav left ends-->
-                <div class="nav-right">
-                    <ul>
-                        <li><input type="text" placeholder="Search" class="search"/><i class="fa fa-search"
-                                                                                       aria-hidden="true"></i>
-                            <div class="search-result">
-
-                            </div>
-                        </li>
-                        <li class="hover"><label class="drop-label" for="drop-wrap1"><img src="<?php echo $user->profile_photo; ?>"/></label>
-                            <input type="checkbox" id="drop-wrap1">
-                            <div class="drop-wrap">
-                                <div class="drop-inner">
-                                    <ul>
-                                        <li><a href="<?php echo $user->username; ?>"><?php echo $user->username; ?></a>
-                                        </li>
-                                        <li><a href="settings/account">Settings</a></li>
-                                        <li><a href="includes/logout.php">Log out</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </li>
-                        <li><label for="pop-up-tweet" class="addTweetBtn">Tweet</label></li>
-                    </ul>
-                </div>
-                <!-- nav right ends-->
-            </div>
-            <!-- nav ends -->
-        </div>
-        <!-- nav container ends -->
-    </div>
-    <!-- header wrapper end -->
 
     <!--Profile cover-->
     <div class="profile-cover-wrap">

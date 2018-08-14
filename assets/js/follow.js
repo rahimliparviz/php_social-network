@@ -27,6 +27,8 @@ $(function() {
         } else {
             $.post('http://localhost:8080/twitter/core/ajax/follow.php', { follow: f_id, profile: p_id }, function(d) {
 
+
+                console.log(d)
                 data = JSON.parse(d);
 
                 $btn.removeClass('follow-btn');

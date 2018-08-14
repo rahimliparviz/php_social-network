@@ -1,6 +1,7 @@
 <?php 
 include '../init.php';
 //echo '<li><span class="getValue">'.$_POST['hashtag'].'</span></li>';
+$getFromUsers->preventAccess($_SERVER['REQUEST_METHOD'],realpath(__FILE__),realpath($_SERVER['SCRIPT_FILENAME']));
 
 if(isset($_POST['hashtag'])){
 

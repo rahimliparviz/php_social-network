@@ -1,19 +1,18 @@
 <?php
-/**
- * Created by PhpStorm.
- * User: Parviz
- * Date: 23.07.2018
- * Time: 20:41
- */
+
 
 class Tweet extends User
 {
 
 
-    function __construct($pdo)
+    function __construct($pdo,$msg)
     {
         $this->pdo = $pdo;
+        $this->msg =$msg;
     }
+
+
+
 
 
     public function tweets($user_id,$limit)
@@ -184,7 +183,43 @@ class Tweet extends User
                 $smtm->execute(array(':hash' => $h));
             }
         }
+
     }
+
+
+
+
+
+    public function addMention($status,$user_id,$tw_id)
+    {
+
+        preg_match_all("/@+([a-zA-Z0-9]+)/i", $status, $matches);
+
+
+        if ($matches) {
+            $result = array_values($matches[1]);
+        }
+
+        $sql = "select * from `user` where `username`= :mention";
+
+
+        foreach ($result as $t) {
+            if ($smtm = $this->pdo->prepare($sql)) {
+                $smtm->execute(array(':mention' => $t));
+                $data= $smtm->fetch(PDO::FETCH_OBJ);
+
+            }
+        }
+        if($data->user_id != $user_id){
+
+
+
+            $this->msg->sendNoti($data->user_id,$user_id,$tw_id,'mention');
+
+        }
+
+    }
+
 
     public function getTweetLinks($tw)
     {
@@ -241,6 +276,11 @@ class Tweet extends User
         $stmt->execute();
 
 
+        $this->msg->sendNoti($get_id,$u_id,$t_id,'retweet');
+
+
+
+
     }
 
     public function addLike($u_id, $t_id, $get_id)
@@ -250,6 +290,17 @@ class Tweet extends User
         $stmt->bindParam(":t_id", $t_id, PDO::PARAM_INT);
         $stmt->execute();
         $this->create('likes', array('likeBy' => $u_id, 'likeOn' => $t_id,));
+
+       //oz likelari ucun notification gelmemesi ucun
+        if ($get_id != $u_id){
+            $this->msg->sendNoti($get_id,$u_id,$t_id,'like');
+        }
+
+
+
+
+
+
     }
     public function getUserTweets($u_id)
     {

@@ -1,9 +1,10 @@
 <?php
 class Follow extends User
 {
-    function __construct($pdo)
+    function __construct($pdo,$msg)
     {
         $this->pdo =$pdo;
+        $this->msg=$msg;
     }
 
 public function checkFollow($follower_id,$user_id){
@@ -49,6 +50,10 @@ public function checkFollow($follower_id,$user_id){
         $data=$st->fetch(PDO::FETCH_ASSOC);
 
         echo json_encode($data);
+
+
+        $this->msg->sendNoti($f_id,$u_d,$f_id,'follow');
+
 
     }
 

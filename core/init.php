@@ -10,9 +10,11 @@ global $pdo;
 session_start();
 
 $getFromUsers =new User($pdo);
-$getFromTweets =new Tweet($pdo);
-$getFromFollows =new Follow($pdo);
+
 $getFromMsgs =new Message($pdo);
+$getFromTweets =new Tweet($pdo,$getFromMsgs);
+$getFromFollows =new Follow($pdo,$getFromMsgs);
+
 
 
 define('BASE_URL','http://localhost:8080/twitter/');

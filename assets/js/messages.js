@@ -32,6 +32,7 @@ $(function() {
         var getMsgs = 1;
         $.post('http://localhost:8080/twitter/core/ajax/messages.php', { showMsg: getMsgs }, function(d) {
             $('.popupTweet').html(d);
+            $('#messages').hide();
         })
     });
 

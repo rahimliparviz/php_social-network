@@ -2,6 +2,7 @@
 
 include '../init.php';
 
+$getFromUsers->preventAccess($_SERVER['REQUEST_METHOD'],realpath(__FILE__),realpath($_SERVER['SCRIPT_FILENAME']));
 
 
 if(isset($_POST['delMsg']) && !empty($_POST['delMsg'])) {
@@ -50,6 +51,7 @@ if(isset($_POST['showChatMsg']) && !empty($_POST['showChatMsg'])) {
 if(isset($_POST['showMsg']) && !empty($_POST['showMsg'])) {
     $user_id = $_SESSION['user_id'];
    $msgs= $getFromMsgs->recentMsgs($user_id);
+   $getFromMsgs->msgsViewed($user_id);
    ?>
 
 

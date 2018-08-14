@@ -26,6 +26,14 @@ class User
         return $var;
     }
 
+    public function preventAccess($request,$currentFile,$currentlyExecutedFile){
+        if ($request == "GET" && $currentFile == $currentlyExecutedFile){
+            header('Location:'.BASE_URL.'index.php');
+        }
+
+    }
+
+
 //Login user
     public function login($email, $pass)
     {

@@ -1,6 +1,7 @@
 <?php
 
 include '../init.php';
+$getFromUsers->preventAccess($_SERVER['REQUEST_METHOD'],realpath(__FILE__),realpath($_SERVER['SCRIPT_FILENAME']));
 
 if(isset($_POST) && !empty($_POST)) {
     $status = $getFromUsers->checkInput($_POST['status']);
@@ -14,7 +15,7 @@ if(isset($_POST) && !empty($_POST)) {
         } if (strlen($status) > 140) {
             $error = 'Text is too long';
         }
-        $getFromUsers->create('tweets',array('status'=>$status,'tweetBy'=> $user_id,'tweetImage'=>$twImg,'postedOn'=>date('Y-m-d H:i:s')));
+     $tw_id = $getFromUsers->create('tweets',array('status'=>$status,'tweetBy'=> $user_id,'tweetImage'=>$twImg,'postedOn'=>date('Y-m-d H:i:s')));
 
         preg_match_all("/#+([a-zA-Z0-9])+/i",$status,$hashtag);
 
@@ -24,6 +25,10 @@ if(isset($_POST) && !empty($_POST)) {
         if(!empty($hashtag)){
             $getFromTweets->addtrend($status);
         }
+
+        $getFromTweets->addMention($status,$user_id,$tw_id);
+
+
         $result['success'] = "Your tweet has been posted";
         echo  json_encode($result);
     } else {

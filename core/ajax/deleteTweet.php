@@ -2,6 +2,7 @@
 
 
 include '../init.php';
+$getFromUsers->preventAccess($_SERVER['REQUEST_METHOD'],realpath(__FILE__),realpath($_SERVER['SCRIPT_FILENAME']));
 
 if(isset($_POST['deleteTweet']) && !empty($_POST['deleteTweet'])) {
     $user_id = $_SESSION['user_id'];

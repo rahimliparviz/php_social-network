@@ -1,8 +1,9 @@
 <?php
 include '../init.php';
+$getFromUsers->preventAccess($_SERVER['REQUEST_METHOD'],realpath(__FILE__),realpath($_SERVER['SCRIPT_FILENAME']));
 
 if(isset($_POST['showImg']) && !empty($_POST['showImg'])) {
-    $user_id = $_SESSION['user_id'];
+    $user_id = @$_SESSION['user_id'];
 
     $tw_id = $getFromUsers->$_POST['tw_id'];
     $tw =$getFromTweets->getPopupTw($tw_id);

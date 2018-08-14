@@ -3,9 +3,14 @@ include 'core/init.php';
 
 $user_id = $_SESSION['user_id'];
 $user=$getFromUsers->userData($user_id);
-$notify =$getFromMessages->getNotiCount($user_id);
+$notify =$getFromMsgs->getNotiCount($user_id);
 
 
+//$getFromUsers->preventAccess($_SERVER['REQUEST_METHOD'],realpath(__FILE__),realpath($_SERVER['SCRIPT_FILENAME']));
+
+
+var_dump(realpath(__FILE__));
+var_dump(realpath($_SERVER['SCRIPT_FILENAME']));
 if ($getFromUsers->loggedIn() ===false){
     header('Location:index.php');
 }
@@ -24,7 +29,7 @@ if (isset($_POST['tweet'])) {
         } if (strlen($status) > 140) {
             $error = 'Text is too long';
         }
-        $getFromUsers->create('tweets',array('status'=>$status,'tweetBy'=> $user_id,'tweetImage'=>$tweetImg,'postedOn'=>date('Y-m-d H:i:s')));
+       $tw_id = $getFromUsers->create('tweets',array('status'=>$status,'tweetBy'=> $user_id,'tweetImage'=>$tweetImg,'postedOn'=>date('Y-m-d H:i:s')));
 
         preg_match_all("/#+([a-zA-Z0-9])+/i",$status,$hashtag);
 
@@ -36,82 +41,19 @@ if (isset($_POST['tweet'])) {
         if(!empty($hashtag)){
             $getFromTweets->addtrend($status);
         }
+
+        $getFromTweets->addMention($status,$user_id,$tw_id);
+
     } else {
         $error['fields'] = 'Type or choose image to tweet';
     }
 }
 
 ?>
-<!--
-   This template created by Meralesson.com
-   This template only use for educational purpose
--->
-<!DOCTYPE HTML>
-<html>
-<head>
-    <title>Tweety</title>
-    <meta charset="UTF-8" />
-    <link rel="stylesheet" href="assets/css/font/css/font-awesome.min.css"/>
-    <link rel="stylesheet" href="assets/css/style-complete.css"/>
-    <script src="assets/js/jquery.js"></script>
-    <!--<script src="https://code.jquery.com/jquery-3.1.1.min.js" integrity="sha256-hVVnYaiADRTO2PzUGmuLJr8BLUSjGIZsDYGmIJLv2b8=" crossorigin="anonymous"></script>
-</head>
-<!--Helvetica Neue-->
-<body>
-<div class="wrapper">
-    <!-- header wrapper -->
-    <div class="header-wrapper">
-
-        <div class="nav-container">
-            <!-- Nav -->
-            <div class="nav">
-
-                <div class="nav-left">
-                    <ul>
-                        <li><a href="#"><i class="fa fa-home" aria-hidden="true"></i>Home</a></li>
-                        <li><a href="i/notifications"><i class="fa fa-bell" aria-hidden="true"></i>Notification<span id="notification"><?php if ($notify->totalN > 0){echo '<span id="span-i">'.$notify->totalN.'</span>';}?></span></a></li>
-                        <li id="messagePopup"><i class="fa fa-envelope" aria-hidden="true"></i>Messages <span id="messages"><?php if ($notify->totalM > 0){echo '<span id="span-i">'.$notify->totalM.'</span>';}?></span></li>
-                    </ul>
-                </div><!-- nav left ends-->
-
-                <div class="nav-right">
-                    <ul>
-                        <li>
-                            <input type="text" placeholder="Search" class="search"/>
-                            <i class="fa fa-search" aria-hidden="true"></i>
-                            <div class="search-result">
-                            </div>
-                        </li>
-
-                        <li class="hover"><label class="drop-label" for="drop-wrap1"><img src="<?php echo $user->profile_photo; ?>"/></label>
-                            <input type="checkbox" id="drop-wrap1">
-                            <div class="drop-wrap">
-                                <div class="drop-inner">
-                                    <ul>
-                                        <li><a href="<?php echo $user->username; ?>"><?php echo $user->username; ?></a></li>
-                                        <li><a href="settings/account">Settings</a></li>
-                                        <li><a href="includes/logout.php">Log out</a></li>
-                                    </ul>
-                                </div>
-                            </div>
-                        </li>
-                        <li><label class="addTweetBtn">Tweet</label></li>
-                    </ul>
-                </div><!-- nav right ends-->
-
-            </div><!-- nav ends -->
-
-        </div><!-- nav container ends -->
-
-    </div><!-- header wrapper end -->
 
 
 
-
-<script type="text/javascript" src='assets/js/search.js'></script>
-<script type="text/javascript" src='assets/js/hashtag.js'></script>
-
-
+<?php include 'includes/header.inc.php'?>
 
 
 
@@ -159,7 +101,7 @@ if (isset($_POST['tweet'])) {
                                                 FOLLOWING
                                             </div>
                                             <div class="num-body">
-                                                <span class="count-following">                                                <span class="count-followers"><?php echo $user->followers ;?></span>
+                                                <span class="count-following">
                                                     <?php echo $user->following ;?></span>
                                             </div>
                                         </div>
@@ -248,6 +190,8 @@ if (isset($_POST['tweet'])) {
                         <script type="text/javascript" src="assets/js/fetch.js"></script>
                         <script type="text/javascript" src="assets/js/messages.js"></script>
                         <script type="text/javascript" src="assets/js/postMsg.js"></script>
+                        <script type="text/javascript" src="<?php echo BASE_URL?>assets/js/noti.js"></script>
+
 
 
 
