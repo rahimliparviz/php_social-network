@@ -2,9 +2,9 @@
 
 
 
-if ($_SERVER['REQUEST_METHOD'] == "GET" && realpath(__FILE__)==realpath($_SERVER['SCRIPT_FILENAME'])){
-    header('Location:../index.php');
-}
+//if ($_SERVER['REQUEST_METHOD'] == "GET" && realpath(__FILE__)==realpath($_SERVER['SCRIPT_FILENAME'])){
+  //  header('Location:../index.php');
+// }
 
 include '../core/init.php';
 
@@ -97,6 +97,9 @@ if (isset($_GET['step']) === true && empty($_GET['step']) === false) {
                         </div>
                     </div>
                 <?php } ?>
+
+
+
                 <?php if ( $_GET['step'] == '2') { ?>
                     <div class='lets-wrapper'>
                         <div class='step-letsgo'>

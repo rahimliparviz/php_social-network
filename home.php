@@ -1,16 +1,15 @@
 <?php
 include 'core/init.php';
 
+
+
+
 $user_id = $_SESSION['user_id'];
 $user=$getFromUsers->userData($user_id);
 $notify =$getFromMsgs->getNotiCount($user_id);
 
 
-//$getFromUsers->preventAccess($_SERVER['REQUEST_METHOD'],realpath(__FILE__),realpath($_SERVER['SCRIPT_FILENAME']));
 
-
-var_dump(realpath(__FILE__));
-var_dump(realpath($_SERVER['SCRIPT_FILENAME']));
 if ($getFromUsers->loggedIn() ===false){
     header('Location:index.php');
 }
@@ -81,7 +80,7 @@ if (isset($_POST['tweet'])) {
                                     </div><!--  in b box end-->
                                     <div class="info-body-name">
                                         <div class="in-b-name">
-                                            <div><a href="<?php echo $user->username; ?>"><?php echo $user->nick_name; ?></a></div>
+                                            <div><a href="<?php echo BASE_URL.$user->username; ?>"><?php echo $user->nick_name; ?></a></div>
                                             <span><small><a href="<?php echo $user->username; ?>">@<?php echo $user->username; ?></a></small></span>
                                         </div><!-- in b name end-->
                                     </div><!-- info body name end-->
@@ -179,7 +178,6 @@ if (isset($_POST['tweet'])) {
                         </div>
                         <div class="popupTweet"></div>
                         <!--Tweet END WRAPER-->
-                        <script type="text/javascript" src="assets/js/a.js"></script>
 
                         <script type="text/javascript" src="assets/js/retweet.js"></script>
                         <script type="text/javascript" src="assets/js/like.js"></script>

@@ -1,9 +1,9 @@
 <?php
 
 
-if ($_SERVER['REQUEST_METHOD'] == "GET" && realpath(__FILE__)==realpath($_SERVER['SCRIPT_FILENAME'])){
-    header('Location:../index.php');
-}
+//if ($_SERVER['REQUEST_METHOD'] == "GET" && realpath(__FILE__)==realpath($_SERVER['SCRIPT_FILENAME'])){
+  //  header('Location:../index.php');
+//}
 
 if (isset($_POST['signup'])){
 
@@ -33,12 +33,11 @@ if (isset($_POST['signup'])){
                 $error='Email is already taken';
             } else{
 
-//$getFromUsers->register($email,$nickName,md5($password));
-//header('Location:home.php');
 
             $user_id  =    $getFromUsers->create('user',array('nick_name'=>$nickName,'email'=>$email,'password'=>md5($password),'profile_photo'=>'assets/images/profile.png','profile_cover'=>'assets/images/cover.png'));
             $_SESSION['user_id']=$user_id;
-                header('Location:includes/signup.php?step=1');
+
+            header('Location:includes/signup.php?step=1');
             }
         }
 
